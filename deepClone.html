@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // function deepClone(obj,tar){
+    //     var tarTemp = tar || {}
+    //     for(var k in obj){
+    //         if(obj.hasOwnProperty(k)){
+    //             if(typeof obj[k] === 'object' && typeof obj[k] !== 'null'){
+    //                 tarTemp[k] = String(obj[k]) === '[object Object]'?{}:[]
+    //                 deepClone(obj[k],tarTemp[k])
+    //             }else{
+    //                 tarTemp[k] = obj[k]
+    //             }
+    //         }
+    //     }
+    //     return tarTemp
+    // }
+
+    function deepClone(obj,hashMap = new WeakMap()){
+        if(obj == undefined || typeof obj !== 'object'){
+            return obj
+        }
+        if(obj instanceof Date){
+            return new Date(obj)
+        }
+        if(obj instanceof RegExp){
+            return new RegExp(obj)
+        }
+        const hasKey = hashMap.get(obj)
+        if(hasKey){
+            return hasKey
+        }
+        let temp = new obj.__proto__.constructor()
+
+        hashMap.set(obj,temp)
+        for (const key in obj) {    
+            if (Object.hasOwnProperty.call(obj, key)) {
+                temp[key] = deepClone(obj[key],hashMap)
+            }
+        }
+        return temp
+    }
+    let test1 = {
+        a:{
+            name:1,
+            age:12,
+            b:{
+                a:{
+                    name:2,
+                    age:13,
+                    b:{
+                        name:3,
+                        age:14
+                    }
+                }
+            }
+        }
+    }
+    
+    let test2 = {
+        test1:{
+            a:1
+        }
+    }
+    console.log(deepClone(test1))
+</script>
+</html>

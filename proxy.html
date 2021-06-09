@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    let vm = new Vue({
+        data() {
+            return {
+                a: 1,
+                b: 2,
+                c: 3
+            }
+        }
+    })
+    console.log(vm)
+
+    function Vue(options) {
+        let _data = options.data()
+        for (let k in _data) {
+            /* Object.defineProperty(this, k, {
+                get() {
+                    console.log(k, 'get');
+                    return _data[k]
+                },
+                set(newValue) {
+                    console.log(k, 'set', newValue);
+                    _data[k] = newValue
+                }
+            }) */
+            this.__defineGetter__(k,()=>{
+                return _data[k]
+            })
+            this.__lookupGetter({
+                
+            })
+        }
+    }
+</script>
+
+</html>
