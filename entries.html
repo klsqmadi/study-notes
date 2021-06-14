@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //Object.entries()
+    //返回对象自身可枚举的键值对数组  ，而for in的区别在于for in还会枚举原型链中的属性
+    //Object.fromEntries() 跟entries 相逆
+    Object.myEntries = function(target){
+        var _pool = []
+        if(typeof target === 'object' && target !== null){
+            for (const key in target) {
+                if (Object.hasOwnProperty.call(target, key)) {
+                    _pool.push([key,target[key]])                    
+                }
+            }
+        }
+        return _pool
+    }
+    Object.myFromEntires = function(arr){
+        let _obj = {}
+        if(Object.prototype.toString.call(arr) == '[object Array]'){
+            let _len = arr.length
+            for(let i = 0; i < _len; i++){
+                let _property = arr[i]
+                _obj[_property[0]] = _property[1] 
+            }
+        }
+        return _obj
+    }
+    Object.prototype.d = 4
+    let obj = {
+        a:1,
+        b:2,
+        c:3
+    }
+    console.log(obj)
+    for (const key in obj) {
+        console.log(key)
+    }
+    var arr = Object.myEntries(obj)
+    console.log(arr)
+    var arr = Object.myFromEntires(arr)
+    console.log(arr)
+</script>
+</html>

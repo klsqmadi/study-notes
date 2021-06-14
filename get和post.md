@@ -1,0 +1,3 @@
+- GET和POST 只是http协议中的两种请求方式，而http是基于tcp/ip协议的，get和post用的都是同一个运输层协议，所以在传输上没什么不同，即本质都是tcp连接
+- 在约定中，get的参数是放在url中的，而post的参数是放在request body中
+    - 当然这只是一个约定而已，

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // let obj = {}
+    // Object.defineProperty(obj,'foo',{})
+    //该方法会在目标对象上定义一个属性，或者修改现有的属性的值，并返回此对象
+    //在默认情况下，descriptor中的configurable enumerable writable 都是false
+    //descriptor 属性描述符  目前分为：数据描述符 和 存取描述符，一个描述符只能是这两个中的其实一个
+    //两个描述符共享 configurable enumerable
+    //configurable 为true，该属性的描述符才可以被改变，同时该属性也才能被删除，默认为false
+    //enumerable 为true 该属性可以被枚举，默认为false
+    //数据描述符 （writable 、value）
+    //writable 为true时，才可以被赋值运算符改变
+    //value 可以是任何有效的值 数值 对象 函数等，默认undefined
+    //存取描述符 （get set）
+    //get 当访问该属性时，会调用此函数，
+    //set 当属性值被修改时，会调用此函数，set有一个参数，即value
+
+    var  o = {}
+    o.a = 1//字面量声明对象  默认时true
+    //=== 等同于
+    // Object.defineProperty(o,"a",{
+    //     value:1,
+    //     writable:true,
+    //     configurable:true,
+    //     enumerable:true
+    // })
+
+    // //--------
+    // Object.defineProperty(o,"b",{value:2})
+    // //=== 等用于  默认这3个都是false
+    // Object.defineProperty(o,"b",{
+    //     value:2,
+    //     writable:false,
+    //     configurable:false,
+    //     enumerable:false
+    // })
+    //如果访问者的属性是被继承的，那么这个属性是会被共享的
+    function myClass(){}
+    var value = 1
+    Object.defineProperty(myClass.prototype,'x',{
+        get(){
+            return value
+        },
+        set(x){
+            value = x
+        }
+    })
+    var a = new myClass()
+    var b = new myClass()
+    console.log(b.x)//b.x == 1
+    a.x = 2
+    console.log(b.x,'b')//b.x == 2
+
+    
+</script>
+</html>

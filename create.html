@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //Object.create(proto,propertiesObject)
+    //create会返回一个对象，会使用传入的第一个参数对象给即将要被创建出来的对象提供 __proto__
+    //proto,
+    //propertiesObject可选,该参数是一个描述符对象，不可为undefined,会传入该对象的自身可枚举属性
+
+    //创建一个原型__proto__ 是null的对象
+    var o = Object.create(null)
+
+    
+    //相当于  o = {}
+    o = Object.create(Object.prototype)
+
+
+    function Constructor(){
+        this.a = 1
+        console.log(123)
+    }
+    // o = new Constructor();
+    // 上面的一句就相当于:
+    o = Object.create(Constructor.prototype);
+    console.log(o)
+    // 当然,如果在Constructor函数中有一些初始化代码,Object.create不能执行那些代码
+
+    let obj = Object.create({a:1},{
+        foo:{
+            value:1,
+            configurable:false,
+            enumerable:false,
+            writable:true
+        }
+    })
+    obj.foo = 2 
+    console.log(obj)   
+    Object.defineProperty(obj,'foo',{
+        value:3,
+        enumerable:true
+    })
+
+    
+    console.log(obj)
+</script>
+</html>

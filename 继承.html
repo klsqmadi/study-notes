@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //问题:说一下类的创建和继承
+
+    // javascript是一门基于原型的语言，当我们调用一个对象本身没有的属性时，js会沿它的原型对象去查找这个属性，如果原型对象也没有，
+    //那么就会去招原型的原型，直到root原型也就是Object.prototype（原型为null）
+
+    //js本身没有类 这个概念，我们可以通过构造函数来模拟类
+    function Person(name) {
+        this.name = name
+    }
+    let p = new Person()
+    //通过new操作符来创建一个实例，new操作上实际做了这么几件事
+    //创建一个对象,将对象的__proto__指向 构造函数的原型 let obj = Object.create(Person.prototype)
+    //执行构造函数之前将构造函数的this指向刚才创建的对象，然后传入参数，最后执行构造函数
+    //如果构造函数返回的结果是一个对象，就返回这个对象，如果不是一个对象就返回刚才创建的对象
+
+    //js的继承方式
+    //1.原型链继承
+        //缺点  所有子例会共享父类的所有属性和方法，但这不是我们想要的
+        // function SuperType() {
+        //     this.colors = ["red", "blue", "green"];
+        // }
+
+        // function SubType() {}
+
+        // SubType.prototype = new SuperType();
+
+        // var instance1 = new SubType();
+        // instance1.colors.push("black");
+        // console.log(instance1.colors); //"red,blue,green,black"
+
+        // var instance2 = new SubType();
+        // console.log(instance2.colors); //"red,blue,green,black"
+    //2.借用构造函数继承
+        //缺点 每次new Student2 都会重复执行 Person2.call(this) 相当于把Person2的属性再复制一份
+        //而且只能继承父类的实例属性和方法，不能继承父类原型上的属性和方法
+        // function Person2(age){
+        //     this.age = age
+        //     this.name = 2
+        // }
+        // function Student2(id){
+        //     Person2.call(this)
+        //     this.id= id
+        // }
+        // var instance2 = new Student2(2)
+        // console.log(instance2)
+    //3.组合继承，原型链 + 构造函数
+        //缺点 在创建子类实例对象时，会调用两次父类，其原型上会有两份父类的属性和方法，一份在子类的原型上，一份在子类实例上
+        // function SuperType(name){
+        //     this.name = name
+        //     this.color = ['red','blue']
+        // }
+        // SuperType.prototype.sayName = function(){
+        //     console.log(this.name,'say name')
+        // }
+        // function SubType(name,age){
+        //     //第一次调用
+        //     SuperType.call(this,name)
+        //     this.age = age
+        // }
+        // //第一次调用SuperType()
+        // SubType.prototype = new SuperType()
+        // SubType.prototype.constructor = SubType
+        // SubType.prototype.sayAge = function(){
+        //     console.log(this.age,'say age')
+        // }
+        // //第二次调用SuperType()
+        // var instance1 = new SubType('小明',12)
+        // console.log('instance1: ', instance1);
+        // var instance2 = new SubType('小红',20)
+        // console.log('instance2: ', instance2);
+        // instance1.sayAge()
+        // instance1.sayName()
+    //4.原型式继承 也就是Object.create()
+        //不能传递参数，实例共享同一个父类
+        /* function createObj(obj){
+            function F(){}
+            F.prototype = obj
+            return new F()
+        }
+        var person = {
+            name:1
+        }
+        var instance1 = createObj(person) */
+    //5.寄生式继承
+        // 不能传递参数，实例共享同一个父类
+        /* function createAnother(original){
+            var obj = Object.create(original)
+            obj.sayHi = ()=>{
+                console.log('hi')
+            }
+            return obj
+        }
+        var person = {
+            name:2,
+            color:['red','blue']
+        }
+        var instance2 = createAnother(person)
+        console.log(instance2) */
+    //6.寄生组合式继承
+        function inheritPrototype(superType,subType){
+            var prototype = Object.create(subType.prototype)
+            subType.prototype = prototype
+            prototype.constructor = subType
+        }
+        function Person(name){
+            this.name = name
+            this.color = ['red','blue']
+        }
+        function Student(name,age){
+            Person.call(this,name)
+            this.age = age
+        }
+        var instance1 = new Student('123',13)
+        console.log('instance1: ', instance1);
+        instance1.color.push('789')
+        var instance2 = new Student('456',21)
+        console.log('instance2: ', instance2);
+    //7.class extends
+
+</script>
+
+</html>
