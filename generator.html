@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // function* gen(x){
+    //     console.log('start')
+    //     var y = yield a
+    //     console.log(1,y)
+    // }
+    // function a(fn){
+    //     return fn()
+    // }
+    // let g = gen(1)
+    // let res1 = g.next().value(()=>{
+    //     console.log('aaaaa')
+    // })
+    // console.log(res1)
+    // let res2 = g.next(res1.value)
+    // console.log(res2)
+
+
+    // const thunk = function(fn){
+    //     return function(...res){
+    //         return function(callback){
+    //             return fn(...res,callback)
+    //         }
+    //     }
+    // }
+
+
+    function co(fn, ...args) {
+        return new Promise((resolve, reject) => {
+            // 处理 generator 函数
+            const gen = fn(...args)
+
+            // 自动执行下一步
+            const next = result => {
+                let value = result.value
+                if (result.done) return resolve(value)//递归结束点
+
+                // 如果是 generator 函数
+                if (value && value.constructor && value.constructor.name === 'GeneratorFunction') {
+                    value = co(value)
+                }
+                
+                // 就算 value 是 promise，也包裹起来
+                //onFulfilled 递归起始点
+                console.log(value,'3.value')
+                // onFulfilled(value)
+                //使用Promise是为了判断 value是否为promise对象，因为直接调用onFulfilled 不能正常获取到promise resolve之后的值
+                Promise.resolve(value).then(onFulfilled, onRejected)
+            }
+
+            const onFulfilled = res => {
+                console.log('1.onFulfilled-------------',res)
+                let result
+                try {
+                    result = gen.next(res)
+                    console.log('2.ful result',result)
+                    next(result)
+                } catch (err) {
+                    return reject(err)
+                }
+            }
+
+            const onRejected = err => {
+                let result
+                try {
+                    result = gen.throw(err)
+                    next(result)
+                } catch (e) {
+                    return reject(e)
+                }
+            }
+
+            onFulfilled()
+        })
+    }
+
+    // ---- test ----
+    const ret = co(function* () {
+        const a = yield 1
+        const b = yield a + 1
+        const c = yield b + 1
+        const d = yield c + 1
+        return d
+    })
+    ret.then(v => console.log(v,'ret1111'))
+
+    // demo
+    function demo() {
+        const fn = v => {
+            return new Promise(resolve => {
+                setTimeout(() => resolve(v), 200)
+            })
+        }
+
+        const ret = co(function* () {
+            const a = yield fn(1)
+            const b = yield fn(a + 1)
+            const c = yield fn(b + 1)
+            const d = yield fn(c + 1)
+            return d
+        })
+        ret.then(v => console.log(v))
+    }
+
+    function demoTwo() {
+        const ret = co(function* () {
+                yield 1;
+                yield (function(){throw 'errrrrrrrrrrrrr'})()
+                yield 2
+            
+        })
+
+        ret.catch(err => console.log(err))
+    }
+    // demo()
+    // demoTwo()
+</script>
+
+</html>
