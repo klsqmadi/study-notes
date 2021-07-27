@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        .img > img{
+            /* width: 200px; */
+            /* height: 200px; */
+            margin: 0 auto;
+            width: 80%;
+            height: 80%;
+            object-fit: cover;
+        }
+        .img{
+            width: 600px;
+            height: 600px;
+            flex-grow: 1;
+        }
+        .imgList{
+            margin: 200px auto;
+            width: 1600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000000;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="imgData" style="display:none">
+        [{"img":"1.png"},{"img":"1.png"},{"img":"1.png"},{"img":"1.png"},{"img":"1.png"},{"img":"1.png"}]
+    </div>
+    <div class="imgList"></div>
+</body>
+<script type="text/html" id="imgListHTML">
+    <div class="img">
+        <img src="2.jpg" alt="nothing" data-src="{{img}}">
+    </div>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+<script>
+    //https://hateonion.me/posts/19jan30/
+    // 上面链接很好
+    
+    // (function(win,doc){
+    //     var $imgList = doc.querySelector('.imgList'),
+    //         $imgTemplate = doc.querySelector('#imgListHTML'),
+    //         data = JSON.parse(doc.querySelector('.imgData').innerHTML);
+
+    //     function init(){
+    //         $imgList.innerHTML = render(data)
+    //         bindEvent() 
+    //     }
+    //     function render(data) {
+    //         var html = ''
+    //         var tpl = $imgTemplate.innerHTML
+    //         data && data.forEach(item=>{
+    //             html += tpl.replace(/{{(.*?)}}/g,function(node,key){
+    //                 return item.img
+    //             })
+    //         })
+    //         return html
+    //     }
+    //     function bindEvent(){
+    //         var images = doc.querySelectorAll('img')
+    //         let cb = imgLazyLoad(images)
+    //         window.onload = window.onscroll = _.throttle(imgLazyLoad(images),500)
+    //     }
+    //     function imgLazyLoad(images){
+    //         var imgLength = images.length;
+    //         var n = 0;
+    //         function a() {
+    //             console.log(n)
+    //             var sTop = document.body.scrollTop;
+    //             var cHeight = window.innerHeight;
+    //             for(var i = n;i < imgLength; i++){
+    //                 let imgItem = images[i]
+    //                 // if(imgItem.getBoundingClientRect().top < cHeight){
+    //                 if(imgItem.offsetTop){
+    //                     imgItem.src = imgItem.getAttribute('data-src')
+    //                     imgItem.removeAttribute('data-src')
+    //                     n++
+    //                 }
+    //             }
+    //         }
+    //         return a
+    //     }
+    //     init()
+    // })(window,document)
+
+
+    //IntersectionObserver 
+    //我们要实现懒加载都需要去监听 scroll 事件，尽管我们可以通过函数节流的方式来阻止高频率的执行函数，
+    //但是我们还是需要去计算 scrollTop，offsetHeight 等属性，有没有简单的不需要计算这些属性的方式呢，
+    //答案就是 IntersectionObserver。
+    //由于可见（visible）的本质是，目标元素与视口产生一个交叉区
+</script>
+
+</html>

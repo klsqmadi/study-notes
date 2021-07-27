@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+    //定时器的时间间隔，指的是何时将定时器的代码添加到消息队列，而不是何时执行代码，
+    //所以真正何时执行代码的时间是不能保证的，何时执行取决于主线程的事件循环
+
+    //setInterval 容易造成内存泄漏
+    //因为setInterval 需要手动执行clearInterval  而setTimeout执行一次之后后自动释放内存
+
+    //setTimeout 与 setInterval 的区别
+    //每个setTimeout产生的任务都会直接push到任务队列中，而setInterval在每次把任务添加到任务队列时，会先判断上次的任务是否仍在队列中，如果有则不添加
+
+    /**
+     * 使用setTimeout 模拟 setInterval
+     * 同时修正setTimeout 带来的延迟 
+    **/
+    //timeout = 1000
+    //diffTime = count * timeout - lastStartTime
+    // 0 1   -> 1   = 2 * 1000 - 1
+    // 0 1.2 -> 0.8 = count * timeout - 1.2 = 2 * 1000 - 1.2
+    // 2 2.3 -> 0.7 = count * timeout-  2.3
+
+    //timeout = 500
+    // 0 0.6 -> 0.4 = count * timeout - 0.6
+    function mySetInterval (fn, timeout) {
+        let timer = null,count = 1;
+        let startTime = new Date().getTime()
+
+        function interval (lastStartTime) {
+            fn()
+            count ++
+            let InstartTime = new Date().getTime()
+            let diffTime = count * timeout - lastStartTime
+            timer = setTimeout(() => {
+                interval(InstartTime)
+            }, diffTime);
+        }
+        interval(startTime)
+        return function(){
+            return clearTimeout(timer)
+        }
+    }
+
+    const clear = mySetInterval(() => {
+        console.log(1)
+    }, 1000)
+
+    setTimeout(() => {
+        clear()
+    }, 5000);
+
+</script>
+</html>

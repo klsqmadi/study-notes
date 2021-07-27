@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="parent">
+        <div>111111</div>
+        <div>111111</div>
+        <div>111111</div>
+        <div>111111</div>
+        <div>111111</div>
+        <div>111111</div>
+        <div>111111</div>
+    </div>
+</body>
+<script>
+    // let parent = document.querySelector('.parent')
+    // let nodes = parent.querySelectorAll('div')
+    // parent.addEventListener('click',(e)=>{
+    //     console.log(e)
+    // })
+    // for (const [key,item] of Object.entries(nodes)) {
+    //     item.addEventListener('click',(e)=>{
+    //         console.log(e,'****************************************')
+    //     })
+    // }
+
+    //clientHeight clientWidth
+    //clientLeft clientTop
+        //*****************************
+    //1.clientHeight表示可视区域的高度，  content的height + 上下padding(不包括border，滚动条 margin)
+    //2..clientWidth表示可视区域的宽度，  content的width + 左右padding(不包括border和滚动条，margin)
+    //3.clientLeft  border.left(左边框的宽度)
+    //4.clientTOp  border.top(上边框的宽度)
+
+    //scrollHeight scrollWidth
+    //scrollLeft scrollTop
+        //*****************************
+    //scrollWidth 可视区域宽度 + 被隐藏区域宽度 (包括content padding 伪元素)
+    //scrollHeight 可视区域高度 + 被隐藏区域高度(包括content padding 伪元素)
+    //scrollTop 整个内容层顶部 到 可视区域顶部的距离（被遮住的高度）
+    //scrollLeft 整个内容层左侧 到 可视区域左侧的距离（左边被遮住的宽度）
+
+    //offsetWidth offsetHeight
+    //offsetLeft offsetTop
+        //*****************************
+    //offsetWidth 可视区域的宽度 content padding border 滚动条 （不包括伪元素 margin）
+    //offsetHeight 可视区域的高度 content padding border 滚动条 （不包括伪元素 margin）
+    //offsetTop 当前元素上边框外边缘到最近已定位父级 上边框 内边缘的距离，如果父级都没有定位，则是到body的顶部的距离
+    //offsetLeft 当前元素左边框外边缘到最近已定位父级 左边框 内边缘的距离，如果父级都没有定位，则是到body的左部的距离
+
+    //clientX clientY
+    //表示鼠标相对浏览器的坐标
+
+    //screenX screenY
+    //表示鼠标相对显示器屏幕的坐标
+
+    //offsetX offsetY
+    //表示鼠标相对 事件源的坐标
+    //pageX pageY
+</script>
+</html>

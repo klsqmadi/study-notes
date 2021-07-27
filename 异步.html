@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+
 </body>
 <script>
+    //问题：如何解决异步回调地狱
+
     //如果一个函数无法立即返回value，而是要经过一段不可预测的时间（副作用）才能返回value，那我们怎么才能拿到value呢
     //回调函数，可以让我们获取不可预测行为的结果
     //不过回调函数在语法层面上有很严重的问题 ---回调地狱
@@ -18,14 +22,14 @@
     //社区带来了类promise 和 promise
     //deferred不是自执行的，而promise是自执行的，会自动捕捉异常
     //deferred的方式存在一个致命的缺陷，就是promise链的第一个promise的触发阶段抛出的异常时不交由promise自动处理的，必须用try catch 然后通过deferred.reject触发
-        // setTimeout(() => {
-        //     try{
-        //         throw 'err'
-        //     } catch (err){
-        //         deferred.reject(err)
-        //     }
-        // }, 200);
-        // deferred.promise.catch(reason=>console.log(reason))
+    // setTimeout(() => {
+    //     try{
+    //         throw 'err'
+    //     } catch (err){
+    //         deferred.reject(err)
+    //     }
+    // }, 200);
+    // deferred.promise.catch(reason=>console.log(reason))
     //promise存在的意义
     //promise是为了解决异步流程控制而产生的，流程控制包括了正常的数据流和异常数据处理，而解决回调地狱是顺手解决的
     //但是promise链式调用的语法还是不够同步，不是将异步转换为同步的方法，只是扁平化了，一种更良好的编程风格而已，实际上还是函数嵌套函数，怎么办
@@ -36,4 +40,5 @@
     //我们可以手写一个自启动器，帮助我们递归的去自动调用next(),直到done:true，结束迭代，返回结果
     //async/await 就是自启动器的语法糖
 </script>
+
 </html>
