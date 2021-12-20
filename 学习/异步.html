@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //js只有一个线程，但指的是主线程只有一个，并不是整个运行环境是单线程
+    //浏览器的进程
+    //chrome
+    //浏览器进程
+    //渲染进程  
+        //GUI线程  用于解析HTML和css 构建DOM树和cssOM树， render树
+        //JS引擎线程 负责执行js的主线程，这个线程跟GUI线程是排斥的
+            //js引擎组成
+            //parser 解析器，负责将js源代码转换成AST树
+            //interpreter 解释器，负责转换AST成字节码。并解释执行
+            //JIT compiler 对执行时的热点函数进行编译，把字节码转换成机器码，之后可以直接执行机器码
+            // gc 垃圾回收器，负责回收堆内存中不再使用的对象
+            //编译具体看异步.html
+        //定时器触发线程 负责setTimeout setInterval
+        //事件触发线程  负责将触发事件 添加到处理队列的队尾
+        //异步Http线程 负责api接口 xmlrequest callback -> 任务队列
+    //GPU进程
+    //网络进程
+    //插件进程
+
+    //js 新开一个线程  
+    //Web Worker  创建Worker时，JS引擎向浏览器申请开一个子线程 ,WebWorker只属于某个页面，不会和其他页面的Render进程
+    //Shared Worker 是一个进程， SharedWorker是浏览器所有页面共享的，不能采用与Worker同样的方式实现，因为它不隶属于某个Render进程，可以为多个Render进程共享使用
+
+
+// 5642 7576738
+    // node环境下
+    // timer -> I/O pending callbacks -> idle, prepare -> poll -> check -> close callbacks -> timers   循环
+    //timer 执行 setTimeout 和 setInterval 的回调
+    // I/O pending callbacks 上一轮循环中有少数的I/O callback会被延迟到这一轮的这一阶段执行
+    //idle prepare 队列的移动，仅系统内部使用
+    //poll 执行 I/O callback ，在适当情况会阻塞在这个阶段
+    //check 执行setImmediate 的回调
+    //close callback 执行close事件的回调
+
+    //process.nextTick()是一个特殊的异步API，他不属于任何的Event Loop阶段。事实上Node在遇到这个API时，Event Loop根本就不会继续进行，会马上停下来执行process.nextTick()
+
+
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------
+    //问题：如何解决异步回调地狱
+
+    //如果一个函数无法立即返回value，而是要经过一段不可预测的时间（副作用）才能返回value，那我们怎么才能拿到value呢
+    //回调函数，可以让我们获取不可预测行为的结果
+    //不过回调函数在语法层面上有很严重的问题 ---回调地狱
+    //回调地狱可以通过封装和简化来保证代码的可读性，但bug在封装和简化的过程中很容易产生
+    //解决方案
+    //社区带来了类promise 和 promise
+    //deferred不是自执行的，而promise是自执行的，会自动捕捉异常
+    //deferred的方式存在一个致命的缺陷，就是promise链的第一个promise的触发阶段抛出的异常时不交由promise自动处理的，必须用try catch 然后通过deferred.reject触发
+    // setTimeout(() => {
+    //     try{
+    //         throw 'err'
+    //     } catch (err){
+    //         deferred.reject(err)
+    //     }
+    // }, 200);
+    // deferred.promise.catch(reason=>console.log(reason))
+    //promise存在的意义
+    //promise是为了解决异步流程控制而产生的，流程控制包括了正常的数据流和异常数据处理，而解决回调地狱是顺手解决的
+    //但是promise链式调用的语法还是不够同步，不是将异步转换为同步的方法，只是扁平化了，一种更良好的编程风格而已，实际上还是函数嵌套函数，怎么办
+
+    //promise + generator
+    //这种模式解决了promise带来的问题，但需要手动去调用gen.next(),怎么办
+
+    //我们可以手写一个自启动器，帮助我们递归的去自动调用next(),直到done:true，结束迭代，返回结果
+    //async/await 就是自启动器的语法糖
+
+    // setTimeout(() => {
+    //     console.log(1)
+    //     new Promise((resolve) => {
+    //         setTimeout(() => {
+    //             resolve(2)
+    //         }, 50);
+    //         console.log(3)
+    //     }).then((data) => {
+    //         console.log(4)
+    //     })
+    // }, 50);
+    // console.log(5)
+    // async function qqq(){
+    //     return Promise.resolve(3)
+    // }
+    // async function b() {
+    //     let a = qqq().then((v) => console.log('v: ', v))
+    //     console.log('a: ', a);
+    //     // a = await qqq()
+    //     // console.log('a: ', a);
+    // }
+    // b()
+
+    //api1 -> result1 -> result1 -> api2
+    // async function async1() {
+    //     console.log("async1 start");
+    //     await async2();
+    //     console.log("async1 end");
+
+    // }
+    // // new Promise().then().then(() => {
+    // //     console.log("async1 end");
+    // // })
+    //     //js 单线程  ，只是js引擎是一个单线程   js的整个执行环境 是一个多线程的
+    //     //一个进程  里面可以有多个线程
+    // async function async2() {
+    //     console.log("async2");
+    // }
+
+    // console.log("script start");
+
+    // setTimeout(function () {
+    //     console.log("setTimeout");
+    // }, 0);
+
+    // async1();
+
+    // new Promise(function (resolve) {
+    //     console.log("promise1");
+    //     resolve();
+    // }).then(function () {
+    //     console.log("promise2");
+    // });
+
+    // console.log("script end");
+
+    // const gen = function* (k) {
+    //     const a = yield new Promise((resolve) => {
+    //         resolve(k)
+    //     }).then(res => {
+    //         return res
+    //     })
+    //     const b = yield a + 'b'//await a + 'b'
+    //     const c = yield b + 'c'
+    //     const d = yield c + 'd'
+    //     return d
+    // }
+    
+    //let res1 = await api1
+    //let res2 = await api2(res1)
+
+    //generator //async await 语法糖 -> promise + generator
+    //promise 浏览器 只用于 请求接口 大部分都是同步代码
+    //node 大部分是异步 promise 为了node而产生
+    // const res = gen(44)
+    // console.log(res.next())//44
+    // console.log(res.next('2'))//2b
+    // console.log(res.next('3'))//3c
+    // console.log(res.next('4'))//4d
+    // console.log(res.next('5'))//5
+
+    // function co(gen) {
+    //     let res = gen.next()
+    //     console.log('res: ', res);
+    //     let {
+    //         value,
+    //         done
+    //     } = res
+    //     while (!done) {
+    //         res = gen.next(value)
+    //         console.log('res: ', res);
+    //         value = res.value
+    //         done = res.done
+    //     }
+    //     return res
+    // }
+    // co(gen(1))
+
+    
+</script>
+
+</html>

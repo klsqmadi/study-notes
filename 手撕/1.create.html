@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    Object.myCreate = function(proto, option) {
+        // let obj = {}
+        // if(proto === null) {
+        //     obj.__proto__ = null
+        //     option && Object.defineProperties(obj, option)
+        //     return obj
+        // }
+        // function Fn(){}
+        // Fn.prototype = proto
+        // let obj = new Fn()
+        let obj = {}
+        obj.__proto__ = proto
+        option && Object.defineProperties(obj, option)
+        return obj
+    }
+    //test
+    function a(){
+        this.a = 'a1'
+    }
+    a.prototype.a = 'a2'
+    function b(){
+        this.b = 'b'
+    }
+    b.prototype = Object.myCreate(a.prototype, {
+        foo: {
+            value:'foo'
+        },
+        bar: {
+            value: 'bar'
+        }
+    })
+    var c = new b()
+    console.log( c);
+
+    var d = Object.myCreate(null, {
+        foo: {
+            value:'foo'
+        },
+    })
+    console.log(d)
+    
+</script>
+</html>

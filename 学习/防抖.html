@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // function debounce (callback, wait, trigger) {
+    //     let timer
+    //     return function () {
+    //         let _context = this
+    //         clearTimeout(timer)
+    //         if (trigger) {
+    //             let exec = !timer
+    //             timer = setTimeout(() => {
+    //                 timer = null
+    //             }, wait);
+    //             if(exec) fn.call(_context)
+    //         } else {
+    //             timer = setTimeout(() => {
+    //                fn.call(this)
+    //             }, wait);
+    //         }
+    //     }
+    // }
+
+    function throttle(fn, wait) {
+        let previous = Date.now()
+        return function () {
+            let args = [...arguments]
+            let now = Date.now()
+            if (now - previous >= wait) {
+                previous = now
+                fn.apply(this, args)
+            }
+        }
+    }
+    addEventListener('click', debounce(() => {
+        console.log(1)
+    }, 1000))
+
+    function debounce(fn, time) {
+        let timer = null
+        return function () {
+            clearTimeout(timer)
+            if (throttle) {
+                timer = setInterval(() => {
+                    fn.call(this, ...arguments)
+                }, time);
+
+            } else {
+                let exec = !timer
+                timer = setTimeout(() => {
+                    timer = null
+                }, time);
+                if (exec) {
+                    fn.call(this, ...arguments)
+                }
+            }
+
+        }
+    }
+
+    function throttle(fn, wait) {
+        let previous = Date.now()
+        return function() {
+            let now = Date.now()
+            if(now - previous >= wait) {
+                previous = now
+                fn.call(this, ...arguments)
+            }
+        }
+    }
+</script>
+
+</html>

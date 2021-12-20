@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+        .div{
+            filter: blur(0.2em);
+            padding-bottom: 50%;
+            height: 0;
+            position: relative;
+            background-color: aqua;
+        }
+        .box{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent" draggable="true" ondragstart="event.dataTransfer.setData('number',1)">
+    </div>
+</body>
+<script>
+    let a = new Map([[1,2], [3,4]])
+    let b = a.entries()
+    for (const [key, item] of b) {
+        console.log(key, item)
+    }
+    // let arr = [1,2,3]
+    // arr.forEach((item, index, arr) => {
+    //     console.log('this', this)
+    // })
+    
+    // let a = String(1)
+    // let o = {
+    //     toString() {
+    //         return 1
+    //     },
+    //     valueOf() {
+    //         return {}
+    //     }
+    // }
+    // console.log(o.toString())
+    // console.log(a == o)
+</script>
+<!-- <script>
+    // let obj = {
+    //     a: 2
+    // }
+
+    // function person(a, b, c, d) {
+    //     this.a = a
+    //     console.log('a,b,c,d: ', a, b, c, d);
+    //     console.log('person: ', this);
+    //     return 'hello'
+    // }
+    // //----------------------------------------------------------------------------------------------------
+    // Function.prototype.newCall = function (obj) {
+    //     obj = obj || window
+    //     obj.o = this
+    //     let result = obj.o(...Array.prototype.slice.call(arguments, 1))
+    //     delete obj.o
+    //     return result
+    // }
+    // // console.log(person.newCall(obj,1,2,3,4))
+    // //----------------------------------------------------------------------------------------------------
+
+    // Function.prototype.newApply = function (obj, argArr) {
+    //     obj = obj || window
+    //     obj.o = this
+    //     let result = argArr ? obj.o(...argArr) : obj.o()
+    //     delete obj.o
+    //     return result
+    // }
+    // // console.log(person.newApply(obj,[1,2,3]))
+    // //----------------------------------------------------------------------------------------------------
+
+    // Function.prototype.newBind = function (obj) {
+    //     let that = this
+    //     let args1 = Array.prototype.slice.call(arguments, 1)
+
+    //     let newFn = function () {
+    //         let args2 = Array.prototype.slice.call(arguments)
+    //         let args = Array.prototype.concat(args1, args2)
+    //         if (this instanceof that) {
+    //             return that.call(this, ...args)
+    //         } else {
+    //             return that.call(obj, ...args)
+    //         }
+    //     }
+
+    //     newFn.prototype = Object.create(that.prototype)
+    //     return newFn
+    // }
+
+    // Function.prototype.newBind2 = function (thisArg) {
+    //     if (typeof this !== 'function') {
+    //         throw new TypeError(this + ' must be a function');
+    //     }
+    //     var self = this;
+    //     var args = [].slice.call(arguments, 1);
+    //     var bound = function () {
+    //         var boundArgs = [].slice.call(arguments);
+    //         var finalArgs = args.concat(boundArgs);
+    //         if (this instanceof bound) {
+    //             if (self.prototype) {
+    //                 function Empty() {}
+    //                 Empty.prototype = self.prototype;
+    //                 bound.prototype = new Empty();
+    //             }
+    //             var result = self.apply(this, finalArgs);
+    //             var isObject = typeof result === 'object' && result !== null;
+    //             var isFunction = typeof result === 'function';
+    //             if (isObject || isFunction) {
+    //                 return result;
+    //             }
+    //             return this;
+    //         } else {
+    //             return self.apply(thisArg, finalArgs);
+    //         }
+    //     };
+    //     return bound;
+    // }
+    // Function.prototype.newBind3 = function (thisArg) {
+    //     if (typeof this !== "function") {
+    //         throw new Error("Function.prototype.bind - what is trying to be bound is not callable");
+    //     }
+
+    //     var self = this;
+    //     var args = Array.prototype.slice.call(arguments, 1);
+    //     var fNOP = function () {};
+
+    //     var fbound = function () {
+    //         self.apply(this instanceof self ? this : thisArg, args.concat(Array.prototype.slice.call(
+    //             arguments)));
+    //     }
+
+    //     fNOP.prototype = this.prototype;
+    //     fbound.prototype = new fNOP();
+
+    //     return fbound;
+    // }
+
+    // console.log(person.newBind(obj, 1, 2)(3,4))
+    // let newFoo = person.newBind(obj, 1, 2)
+    // let newBar = new newFoo(3, 4)
+    // console.log('newBar: \n', newBar);
+    // console.log(new person(1,1,1,1))
+    // // let foo = person.bind(obj, 1, 2)
+    // // let bar = new foo(3, 4)
+    // // console.log('bar: \n', bar);
+
+    // // let newFoo2 = person.newBind2(obj, 1, 2)
+    // // let newBar2 = new newFoo2(3, 4)
+    // // console.log('newBar2: \n', newBar2);
+
+    // // let newFoo3 = person.newBind3(obj, 1, 2)
+    // // let newBar3 = new newFoo3(3, 4)
+    // // console.log('newBar3: \n', newBar3);
+</script> -->
+<!-- <script>
+    function likeNew(fn){
+        let obj = Object.create(fn.prototype)  
+        let arg = [].slice.call(arguments,1)
+        let result = fn.call(obj,...arg)
+        if(result instanceof Object || result instanceof Function){
+            console.log(1)
+            return result
+        }
+        return obj
+    }
+    function fn() {
+        this.a = 1
+        return function(){}
+    }
+    console.log(likeNew(fn))
+    // let obj = {a:1, b:2}
+    // let arr = [1, 2]
+    // Array.prototype.forEach.call(arr, function(item){console.log(item)})
+    // for (const iterator in obj) {
+    //     console.log('iterator: ', iterator);
+        
+    // }
+    // const reg = /{(.*?)}/g
+    // let str = '{}'
+    // let str1 = '{123}'
+    // let str2 = '10kV永平南线F09线路概况：该线路接入于110kV平乐变电站变电站,线路安全载流量430.0A，{2021年正常运行方式下最大电流为30.0A}、最大负载率为7.0%轻载原因：负荷增长不及预期'
+    // console.log(str.match(reg))
+    // console.log(str1.match(reg))
+    // console.log(str2.match(reg))
+    // console.log(reg.exec(str2))
+    // let str3 = str2.replace(reg, function(match,content,offset,string) {
+    //     return `<span style="color:yellow">${content}</span>`
+    // })                       
+    // console.log(str3)
+    // document.querySelector('.parent').innerHTML = str3
+    // var a = 1
+    // function f1(){
+    //     console.log(a)
+    // }
+    // function f2(){
+    //     var a = 2
+    //     f1()
+    // }
+    // f2()
+    // console.log(a)
+    // let a  =1 
+    // function create(proto) {
+    //     // function F(){}
+    //     // F.prototype = proto
+    //     // return new F()
+    //     let obj = {}
+    //     obj.__proto__ = proto
+    //     return obj
+    // }
+    // function b () {}
+    // b.prototype.move = 2
+    // console.log(create(b))
+    // console.log(Object.create(b))
+
+//     var box = document.querySelector('.box')
+//     document.addEventListener('drag',(e)=>{
+//         console.log('drag: ', e);
+//     })
+//     document.addEventListener("dragstart", function( event ) {
+//         // console.log('dragstart: ', event);
+//       // 保存拖动元素的引用(ref.)
+//     //   dragged = event.target;
+//       // 使其半透明
+//     //   event.target.style.opacity = .5;
+//   }, false);
+//   document.addEventListener('dragover',(e)=>{
+//       e.preventDefault()
+//   })
+</script> -->
+</html>

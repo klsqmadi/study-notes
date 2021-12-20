@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /* function deepClone(obj) {
+        if (typeof obj !== 'object' && obj !== null) {
+            return obj
+        }
+        const tar = new obj.__proto__.constructor()
+        for (const key in obj) {
+            tar[key] = deepClone(obj[key])
+        }
+        return tar
+    } */
+    function deepClone(obj, hashMap = new Map()) {
+        if (typeof obj !== 'object' || obj == undefined) {
+            return obj
+        }
+        if(obj instanceof Date) {
+            return new Date(obj)
+        }
+        if(obj instanceof RegExp){
+            return new RegExp(obj)
+        }
+        let mapVal = hashMap.get(obj)
+        if(mapVal) {
+            return mapVal
+        }
+        let target = new obj.__proto__.constructor()
+        hashMap.set(obj, target)
+        for (const key in obj) {
+            if(Object.prototype.hasOwnProperty(obj, key)) {
+                target[key] = deepClone(obj[key], hashMap)
+            }
+        }
+        return target
+    }
+    var a = {}
+    var b = {}
+    a.b = b
+    b.a = a
+    
+    console.log(deepClone(a))
+    // let a = {
+    //     name:'abc',
+    //     age:12,
+    //     home: {
+    //         add:'asda',
+    //         num:12
+    //     }
+    // }
+    // var b = deepClone(a)
+    // console.log(b)
+    // console.log(a)
+    // b.name = 'b'
+    // console.log(b)
+    // console.log(a)
+</script>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // function deepClone(obj,tar){
+    //     var tarTemp = tar || {}
+    //     for(var k in obj){
+    //         if(obj.hasOwnProperty(k)){
+    //             if(typeof obj[k] === 'object' && typeof obj[k] !== 'null'){
+    //                 tarTemp[k] = String(obj[k]) === '[object Object]'?{}:[]
+    //                 deepClone(obj[k],tarTemp[k])
+    //             }else{
+    //                 tarTemp[k] = obj[k]
+    //             }
+    //         }
+    //     }
+    //     return tarTemp
+    // }
+
+    function forEach (array, callback) {
+        let length = obj.length
+        let index = -1
+        while (++index < length ) {
+            callback(array[index], index)
+        }
+        return array
+    }
+
+    function deepClone(obj,hashMap = new Map()){
+        if(obj == undefined || typeof obj !== 'object'){
+            return obj
+        }
+        let temp = new obj.__proto__.constructor()
+
+        if(obj instanceof Date) {
+            return new Date(obj)
+        }
+        if(obj instanceof RegExp) {
+            return new RegExp(obj)
+        }
+        const hasKey = hashMap.get(obj)
+        if (hasKey) {
+            return hasKey
+        }
+        
+        hashMap.set(obj,temp)
+
+        if(obj instanceof Set) {
+            obj.forEach(item => {
+                temp.add(deepClone(item, hashMap))
+            })
+        }
+
+        if(obj instanceof Map) {
+            obj.forEach((item, key) => {
+                temp.set(key, deepClone(item, hashMap))
+            })
+        }
+ 
+        const keys = Array.isArray(obj) ? undefined : Object.keys(target)
+        forEach(keys || obj, (item, index) => {
+            if (keys) {
+                key = value;
+            }
+            temp[key] = deepClone(obj[key],hashMap)
+        })
+        
+        //for (const key in obj) {    
+        //    if (Object.hasOwnProperty.call(obj, key)) {
+        //        temp[key] = deepClone(obj[key],hashMap)
+        //    }
+        //}
+        return temp
+    }
+    let test1 = {
+        a:{
+            name:1,
+            age:12,
+            b:{
+                a:{
+                    name:2,
+                    age:13,
+                    b:{
+                        name:3,
+                        age:14
+                    }
+                }
+            }
+        }
+    }
+    
+    let test2 = {
+        test1:{
+            a:1
+        }
+    }
+    console.log(deepClone(test1))
+</script>
+</html> -->

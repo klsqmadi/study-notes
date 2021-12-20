@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //只能判断对象
+    function myInstance_2 (target, proto) {
+        if(!proto) return false
+        if(!target) return false
+        let prototype = Object.getPrototypeOf(target)
+        if (prototype === proto.prototype) {
+            return true
+        } else {
+            return myInstance_2(prototype, proto)
+        }
+    }
+
+    function myInstance (target, proto) {
+        if (!proto) {
+            return false
+        }
+        if (target.__proto__ === proto.prototype) {
+            return true
+        } else if (proto.prototype.__proto__) {
+            return myInstance(target.__proto__, proto)
+        }
+    }
+    console.log(myInstance(1, Number))
+</script>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    Function.prototype.myCall_1 = function (target, ...args) {
+        target.fn = this
+        target.fn(...args)
+        delete target.fn
+    }
+    Function.prototype.myCall_2 = function (target) {
+        target.fn = this
+        var args = [];
+        for (let i = 1; i < arguments.length; i++) {
+            args.push('arguments[' + i + ']');
+        }
+        eval(`target.fn(${args})`)
+        delete target.fn
+    }
+    Function.prototype.myCall_3 = function (target, ...args) {
+        target.fn = this
+        target.fn.apply(target, args) //脱裤子放屁
+        delete target.fn
+    }
+
+    Function.prototype.myApply = function (target, ...args) {
+        target.fn = this
+        target.fn(args)
+        delete target.fn
+    }
+    Function.prototype.myBind = function (context, ...args) {
+        var _this = this
+
+        function F() {
+            args = args.concat(Array.prototype.slice.call(arguments))
+            console.log('args: ', args);
+            // console.log(F.prototype)
+            // console.log(F.prototype.__proto__)
+            F.prototype.__proto__ = new _this(...args)
+            // F.prototype.__proto__ = _this.prototype
+            _this.apply(context, args)
+        }
+        return F
+    }
+
+    // function add(a, b, c, d) {
+    //     console.log(this, a, b, c, d)
+    // }
+    // let obj = {
+    //     name: 1
+    // }
+    // add.myBind(obj)(1, 2, 3, 4)
+
+    function Animal(name, color) {
+        this.name = name
+        this.color = color
+    }
+    Animal.prototype.say = function () {
+        return `I am a ${this.name}!!! ${this.color}`
+    }
+
+    const Cat = Animal.myBind(null,3)
+
+    const cat = new Cat('1', '2')
+    console.log(cat.say()) 
+    console.log(cat instanceof Cat) 
+    console.log(cat instanceof Animal)
+    
+    function likeNew(fn, ...args){
+        if(typeof fn !== 'function') {
+            throw 'newOperator function the first param must be a function'
+        }
+        let obj = {}
+        obj.prototype = Object.create(fn.prototype)
+        let result = fn.call(obj, args)
+        return ((typeof result === 'object' && result !== null) || typeof result === 'function')  ? result : obj
+    }
+</script>
+
+</html>

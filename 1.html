@@ -2,166 +2,35 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .parent{
-            width: 100px;
-            height: 100px;
-            background-color: red;
-        }
-        .div{
-            filter: blur(0.2em);
-            padding-bottom: 50%;
-            height: 0;
-            position: relative;
-            background-color: aqua;
-        }
-        .box{
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 
 <body>
-    <div class="parent" draggable="true" ondragstart="event.dataTransfer.setData('number',1)">
-    </div>
+  <div id="app">
+    <h1>{{a}}</h1>
+  </div>
 </body>
-<!-- <script>
-    // let obj = {
-    //     a: 2
-    // }
-
-    // function person(a, b, c, d) {
-    //     this.a = a
-    //     console.log('a,b,c,d: ', a, b, c, d);
-    //     console.log('person: ', this);
-    //     return 'hello'
-    // }
-    // //----------------------------------------------------------------------------------------------------
-    // Function.prototype.newCall = function (obj) {
-    //     obj = obj || window
-    //     obj.o = this
-    //     let result = obj.o(...Array.prototype.slice.call(arguments, 1))
-    //     delete obj.o
-    //     return result
-    // }
-    // // console.log(person.newCall(obj,1,2,3,4))
-    // //----------------------------------------------------------------------------------------------------
-
-    // Function.prototype.newApply = function (obj, argArr) {
-    //     obj = obj || window
-    //     obj.o = this
-    //     let result = argArr ? obj.o(...argArr) : obj.o()
-    //     delete obj.o
-    //     return result
-    // }
-    // // console.log(person.newApply(obj,[1,2,3]))
-    // //----------------------------------------------------------------------------------------------------
-
-    // Function.prototype.newBind = function (obj) {
-    //     let that = this
-    //     let args1 = Array.prototype.slice.call(arguments, 1)
-
-    //     let newFn = function () {
-    //         let args2 = Array.prototype.slice.call(arguments)
-    //         let args = Array.prototype.concat(args1, args2)
-    //         if (this instanceof that) {
-    //             return that.call(this, ...args)
-    //         } else {
-    //             return that.call(obj, ...args)
-    //         }
-    //     }
-
-    //     newFn.prototype = Object.create(that.prototype)
-    //     return newFn
-    // }
-
-    // Function.prototype.newBind2 = function (thisArg) {
-    //     if (typeof this !== 'function') {
-    //         throw new TypeError(this + ' must be a function');
-    //     }
-    //     var self = this;
-    //     var args = [].slice.call(arguments, 1);
-    //     var bound = function () {
-    //         var boundArgs = [].slice.call(arguments);
-    //         var finalArgs = args.concat(boundArgs);
-    //         if (this instanceof bound) {
-    //             if (self.prototype) {
-    //                 function Empty() {}
-    //                 Empty.prototype = self.prototype;
-    //                 bound.prototype = new Empty();
-    //             }
-    //             var result = self.apply(this, finalArgs);
-    //             var isObject = typeof result === 'object' && result !== null;
-    //             var isFunction = typeof result === 'function';
-    //             if (isObject || isFunction) {
-    //                 return result;
-    //             }
-    //             return this;
-    //         } else {
-    //             return self.apply(thisArg, finalArgs);
-    //         }
-    //     };
-    //     return bound;
-    // }
-    // Function.prototype.newBind3 = function (thisArg) {
-    //     if (typeof this !== "function") {
-    //         throw new Error("Function.prototype.bind - what is trying to be bound is not callable");
-    //     }
-
-    //     var self = this;
-    //     var args = Array.prototype.slice.call(arguments, 1);
-    //     var fNOP = function () {};
-
-    //     var fbound = function () {
-    //         self.apply(this instanceof self ? this : thisArg, args.concat(Array.prototype.slice.call(
-    //             arguments)));
-    //     }
-
-    //     fNOP.prototype = this.prototype;
-    //     fbound.prototype = new fNOP();
-
-    //     return fbound;
-    // }
-
-    // console.log(person.newBind(obj, 1, 2)(3,4))
-    // let newFoo = person.newBind(obj, 1, 2)
-    // let newBar = new newFoo(3, 4)
-    // console.log('newBar: \n', newBar);
-    // console.log(new person(1,1,1,1))
-    // // let foo = person.bind(obj, 1, 2)
-    // // let bar = new foo(3, 4)
-    // // console.log('bar: \n', bar);
-
-    // // let newFoo2 = person.newBind2(obj, 1, 2)
-    // // let newBar2 = new newFoo2(3, 4)
-    // // console.log('newBar2: \n', newBar2);
-
-    // // let newFoo3 = person.newBind3(obj, 1, 2)
-    // // let newBar3 = new newFoo3(3, 4)
-    // // console.log('newBar3: \n', newBar3);
-</script> -->
+<script src="https://unpkg.com/vue@next"></script>
 <script>
-    var box = document.querySelector('.box')
-    document.addEventListener('drag',(e)=>{
-        console.log('drag: ', e);
-    })
-    document.addEventListener("dragstart", function( event ) {
-        // console.log('dragstart: ', event);
-      // 保存拖动元素的引用(ref.)
-    //   dragged = event.target;
-      // 使其半透明
-    //   event.target.style.opacity = .5;
-  }, false);
-  document.addEventListener('dragover',(e)=>{
-      e.preventDefault()
-  })
+  'use strict'
+  var a = 2
+  const foo = function () {
+    var a = 3
+    console.log(this.a)
+  }
+
+
+  // foo()
+
+  var obj = {
+    a: 5,
+    foo
+  }
+
+  obj.foo()
 </script>
+
 </html>

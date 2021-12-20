@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function deepClone(obj,hashMap = new WeakMap()){
+        if(obj == undefined || typeof obj !== 'object'){
+            return obj
+        }
+        if(obj instanceof Date){
+            return new Date(obj)
+        }
+        if(obj instanceof RegExp){
+            return new RegExp(obj)
+        }
+        const hasKey = hashMap.get(obj)
+        if(hasKey){
+            return hasKey
+        }
+        let temp = new obj.__proto__.constructor()
+
+        hashMap.set(obj,temp)
+        for (const key in obj) {    
+            if (Object.hasOwnProperty.call(obj, key)) {
+                temp[key] = deepClone(obj[key],hashMap)
+            }
+        }
+        return temp
+    }
+    Array.prototype.myForEach = function(callback, _args = window){
+        let _arr = this
+        let _len = _arr.length
+        for(let i = 0;i < _len; i++){
+            callback.apply(_args,[_arr[i],i,_arr])
+        }
+    }
+    let arr = [1,2,3,4,5]
+    // arr.myForEach(item=>{
+    //     console.log(item)
+    // })
+    Array.prototype.myMap = function(callback){//返回一个新的数组，需要注意进行深拷贝
+        let _arr = this
+        let _len = _arr.length
+        let _args = arguments[1] || window
+        let _data = []
+        for(let i = 0; i < _len; i++){
+            let _item = deepClone(_arr[i])
+            _data.push(callback.call(_args,_item, i, _arr))
+        }
+        return _data
+    }
+    let obj = [
+        {
+            name:1,
+            age:'a'
+        },
+        {
+            name:2,
+            age:'b'
+        },
+        {
+            name:3,
+            age:'c'
+        },
+        {
+            name:4,
+            age:'d'
+        },
+        {
+            name:5,
+            age:'e'
+        }
+    ]
+    // console.log(obj.map(item=>{
+    //     return item.name != 1
+    // }))
+    Array.prototype.myFilter = function(callback){
+        let _arr = this
+        let _len = _arr.length
+        let _args = arguments[1] || window
+        let _data = []
+        for(let i = 0; i < _len; i++){
+            let _item = deepClone(_arr[i]) 
+            let flag = callback.call(_args,_item, i, _arr)
+            if(flag){
+                _data.push(_item)
+            } 
+        }
+        return _data
+    }
+    Array.prototype.myEvery = function(callback){
+        let _arr = this
+        let _len = _arr.length
+        let _args = arguments[1] || window
+        for(let i = 0; i < _len; i++) {
+            let _item = deepClone(_arr[i])
+            if(!callback.call(_args, _item, i ,_arr)){
+                return false
+            }
+        }
+        return true
+    }
+    Array.prototype.mySome = function(callback){
+        let _arr = this
+        let _len = _arr.length
+        let _args = arguments[1] || window
+        for(let i = 0; i < _len; i++) {
+            let _item = deepClone(_arr[i])
+            if(callback.call(_args, _item, i ,_arr)){
+                return true
+            }
+            
+        }
+        return false
+    }
+    Array.prototype.myReduce = function(callback,initialValue){
+        let _arr = this
+        let _len = this.length
+        let _args = arguments[1]
+        for(let i = 1; i < _len; i ++) {
+            initialValue = callback(initialValue, deepClone(_arr[i]), i, _arr)
+        }
+        return initialValue
+    }
+    console.log(obj.myReduce((pre,item,index)=>{
+        return pre+=item.name
+    },0))
+    //reduce实现map
+    Array.prototype.reduceAchieveMap = function(fn, context = window) {
+        return this.reduce((pre, item, index, arr) => [...pre, fn.call(context, item, index, arr)], [])
+    }
+    let q = arr.reduceAchieveMap((item, index, arr) => {
+        item = item * -1
+        console.log('item: ', item);
+        console.log('arr: ', arr);
+        console.log('index: ', index);
+        return item * -1
+    })
+    console.log(q, arr)
+</script>
+</html>
